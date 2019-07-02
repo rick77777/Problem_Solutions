@@ -1,0 +1,36 @@
+Error: open jenkins/values.yaml: no such file or directory
+was the error we faced
+It pointed out that there was no such file or directory as jenkins/values.yaml
+
+We have a directory structure like - 
+
+              continuous-deployment-on-kubernetes
+                              ||
+                 =============================
+                ||                           ||
+            linux-amd64                   jenkins
+                ||                           ||  
+               helm                      values.yaml
+         
+Now we are executing the command from within the linux-amd64 directory - 
+./helm install -n cd stable/jenkins -f jenkins/values.yaml --version 0.16.6 --wait
+
+So it could not find the file as it only looks in the subdirectories and the current directory,
+whereas, jenkins/values.yaml is in another branch of their parent directory.
+
+To solve the error - 
+1) copy the helm file into jenkins directory
+    
+    $ cp linux-amd64/helm jenkins
+   This command does the 'copying' trick
+   
+2) then replace the command given in the tutorial
+    
+    $ ./helm install -n cd stable/jenkins -f jenkins/values.yaml --version 0.16.6 --wait
+    
+    with $ ./helm install -n cd stable/jenkins -f values.yaml --version 0.16.6 --wait
+   
+   This would create the new directory and then the rest of the steps are as in the tutorial
+
+Hope this helps..
+Cheers!!!
